@@ -4,7 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Root@localhost:3306/todoApp'
-#api = Api(app)
 db = SQLAlchemy(app)
 
 class Task(db.Model):
