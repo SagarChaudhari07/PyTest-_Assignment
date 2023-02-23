@@ -44,6 +44,35 @@ def saveTask():
     db.session.commit()
     return {'status': 'success', 'message': 'Task added successfully'}
 
+@app.route("/getdata/<task_id>")
+def getById(task_id):
+    task = Task.query.filter_by(id=task_id).first()
+    if not task:
+        return {'status': 'error', 'message': 'Task not found'}
+
+    task_data = {}
+    task_data['id'] = task.id
+    task_data['title'] = task.title
+    task_data['description'] = task.description
+    task_data['due_date'] = str(task.due_date)
+    task_data['status'] = task.status
+    return task_data
+
+
+@app.route("/editTask/<task_id>", methods=['put'])
+def editTask(task_id):
+    # first() used for if multiple id and name are same it will take first
+    task = Task.query.filter_by(id=task_id).first()
+    if not task:
+        return {'status': 'error', 'message': 'Task not found'}
+    task.title = request.json['title']
+    task.description = request.json['description']
+    task.due_date = request.json['due_date']
+    task.status = request.json['status']
+    
+    db.session.commit()
+    return {'status': 'success', 'message': 'Task updated successfully'}
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
