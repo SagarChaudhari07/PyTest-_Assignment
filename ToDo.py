@@ -33,6 +33,7 @@ def get():
         result.append(task_data)
     return result
 
+
 @app.route("/addTask", methods = ['post'])
 def saveTask():
     title = request.json['title']
@@ -43,6 +44,7 @@ def saveTask():
     db.session.add(task)
     db.session.commit()
     return {'status': 'success', 'message': 'Task added successfully'}
+
 
 @app.route("/getdata/<task_id>")
 def getById(task_id):
@@ -68,10 +70,30 @@ def editTask(task_id):
     task.title = request.json['title']
     task.description = request.json['description']
     task.due_date = request.json['due_date']
-    task.status = request.json['status']
+    # task.status = request.json['status']
     
     db.session.commit()
     return {'status': 'success', 'message': 'Task updated successfully'}
+
+
+@app.route("/markComplete/<task_id>", methods=['put'])
+def markTaskComplete(task_id):
+    task = Task.query.filter_by(id=task_id).first()
+    if not task:
+        return {'status': 'error', 'message': 'Task not found'}
+    task.status = "Completed"
+    db.session.commit()
+    return {'status': 'success', 'message': 'Task updated successfully'}
+
+
+@app.route("/deleteTask/<task_id>", methods=['delete'])
+def deleteTask(task_id):
+    task = Task.query.filter_by(id=task_id).first()
+    if not task:
+        return {'status': 'error', 'message': 'Task not found'}
+    db.session.delete(task)
+    db.session.commit()
+    return {'status': 'success', 'message': 'Task deleted successfully'}
 
 if __name__ == '__main__':
     with app.app_context():
@@ -79,8 +101,8 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 
-#     {
-#     "title" : "  PROCESS",
-#     "description" : " completed of my sql database ",
-#     "due_date" : "25-2-23"
-# }
+    # {
+    # "title" : "  PROCESS",
+    # "description" : " completed of my sql database ",
+    # "due_date" : "25-2-23"
+    # }
