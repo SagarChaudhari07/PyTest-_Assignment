@@ -70,7 +70,7 @@ def editTask(task_id):
     task.title = request.json['title']
     task.description = request.json['description']
     task.due_date = request.json['due_date']
-    # task.status = request.json['status']
+    # task.status = request.json['status'] 
     
     db.session.commit()
     return {'status': 'success', 'message': 'Task updated successfully'}
@@ -94,6 +94,7 @@ def deleteTask(task_id):
     db.session.delete(task)
     db.session.commit()
     return {'status': 'success', 'message': 'Task deleted successfully'}
+
 
 if __name__ == '__main__':
     with app.app_context():
